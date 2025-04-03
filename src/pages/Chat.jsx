@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Send, Loader2, RefreshCw, AlertCircle, User, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -304,7 +305,8 @@ const Chat = () => {
                     type="submit" 
                     size="icon" 
                     disabled={isProcessing || !input.trim()}
-                    className="h-10 w-10 shrink-0"
+                    className="h-10 w-10 shrink-0 flex items-center justify-center"
+                    title="Send message"
                   >
                     <Send className="h-4 w-4" />
                     <span className="sr-only">Send</span>
@@ -322,11 +324,12 @@ const Chat = () => {
               <CardContent className="pb-2">
                 <Button 
                   variant="outline" 
-                  className="w-full justify-start text-sm mb-2" 
+                  className="w-full justify-start text-sm mb-2 gap-2" 
                   onClick={handleReset}
+                  title="Start a new conversation"
                 >
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                  Reset Conversation
+                  <RefreshCw className="h-4 w-4" />
+                  <span className="whitespace-nowrap">Reset Conversation</span>
                 </Button>
               </CardContent>
             </Card>
@@ -341,7 +344,7 @@ const Chat = () => {
                     <Button
                       key={index}
                       variant="ghost"
-                      className="w-full justify-start text-sm h-auto py-2 px-3 text-left"
+                      className="w-full justify-start text-sm h-auto py-2 px-3 text-left font-normal"
                       onClick={() => handleSuggestedPrompt(prompt)}
                     >
                       {prompt}
