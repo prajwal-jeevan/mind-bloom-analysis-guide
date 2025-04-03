@@ -202,7 +202,7 @@ const Resources = () => {
   
   return (
     <div className="pt-28 pb-16">
-      <div className="container">
+      <div className="container px-4 sm:px-6">
         <div className="max-w-3xl mx-auto mb-12">
           <h1 className="text-3xl font-bold mb-4">Mental Wellness Resources</h1>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
@@ -237,7 +237,7 @@ const Resources = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredArticles.length > 0 ? (
                 filteredArticles.map(article => (
-                  <Card key={article.id} className="overflow-hidden card-hover">
+                  <Card key={article.id} className="overflow-hidden card-hover h-full flex flex-col">
                     <div className="aspect-video relative bg-gray-100 dark:bg-gray-800">
                       <img 
                         src={article.image} 
@@ -253,17 +253,17 @@ const Resources = () => {
                         {article.category}
                       </Badge>
                     </div>
-                    <CardHeader className="pb-2">
+                    <CardHeader className="pb-2 px-6">
                       <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-1">
                         <span>{article.readTime}</span>
                         <span>{article.date}</span>
                       </div>
                       <CardTitle className="line-clamp-2">{article.title}</CardTitle>
                     </CardHeader>
-                    <CardContent className="pb-4">
+                    <CardContent className="px-6 pb-6 flex-grow">
                       <CardDescription className="line-clamp-3 mb-4">{article.description}</CardDescription>
                       <Button variant="ghost" className="p-0 h-auto" asChild>
-                        <Link to={`/resources/${article.id}`}>
+                        <Link to={`/resources/${article.id}`} className="flex items-center">
                           Read Article <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>
@@ -285,7 +285,7 @@ const Resources = () => {
               {filteredExercises.length > 0 ? (
                 filteredExercises.map(exercise => (
                   <Card key={exercise.id} className="card-hover h-full flex flex-col">
-                    <CardHeader>
+                    <CardHeader className="px-6">
                       <div className="flex justify-between items-start mb-2">
                         <Badge className={getCategoryColor(exercise.category)}>
                           {exercise.category}
@@ -297,9 +297,9 @@ const Resources = () => {
                       </div>
                       <CardTitle>{exercise.title}</CardTitle>
                     </CardHeader>
-                    <CardContent className="pb-4 flex-grow">
-                      <CardDescription className="mb-4">{exercise.description}</CardDescription>
-                      <Button variant="outline" size="sm" asChild>
+                    <CardContent className="px-6 pb-6 flex-grow flex flex-col">
+                      <CardDescription className="mb-4 flex-grow">{exercise.description}</CardDescription>
+                      <Button variant="outline" size="sm" className="mt-auto w-fit" asChild>
                         <Link to={`/resources/exercise/${exercise.id}`}>
                           Start Exercise
                         </Link>
@@ -321,16 +321,16 @@ const Resources = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredExternalResources.length > 0 ? (
                 filteredExternalResources.map(resource => (
-                  <Card key={resource.id} className="card-hover">
-                    <CardHeader>
-                      <Badge className={getCategoryColor(resource.category)} className="w-fit mb-2">
+                  <Card key={resource.id} className="card-hover h-full flex flex-col">
+                    <CardHeader className="px-6">
+                      <Badge className={`w-fit mb-2 ${getCategoryColor(resource.category)}`}>
                         {resource.category}
                       </Badge>
                       <CardTitle>{resource.title}</CardTitle>
                     </CardHeader>
-                    <CardContent className="pb-4">
-                      <CardDescription className="mb-4">{resource.description}</CardDescription>
-                      <Button variant="outline" size="sm" className="gap-1" asChild>
+                    <CardContent className="px-6 pb-6 flex-grow flex flex-col">
+                      <CardDescription className="mb-4 flex-grow">{resource.description}</CardDescription>
+                      <Button variant="outline" size="sm" className="gap-1 mt-auto w-fit" asChild>
                         <a href={resource.url} target="_blank" rel="noopener noreferrer">
                           Visit Website <ExternalLink className="h-3 w-3" />
                         </a>
@@ -356,10 +356,10 @@ const Resources = () => {
             for personalized guidance.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild>
+            <Button className="px-6" asChild>
               <Link to="/assessment">Take Assessment</Link>
             </Button>
-            <Button variant="outline" asChild>
+            <Button variant="outline" className="px-6" asChild>
               <Link to="/chat">Chat Support</Link>
             </Button>
           </div>

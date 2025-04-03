@@ -79,13 +79,19 @@ const Index = () => {
               evidence-based assessment and receive personalized guidance for growth.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animate-delay-200">
-              <Button size="lg" className="rounded-full" asChild>
+              <Button size="lg" className="rounded-full whitespace-normal px-6 py-2 h-auto" asChild>
                 <Link to="/assessment">
-                  Take Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                  <span className="flex items-center">
+                    Take Assessment <ArrowRight className="ml-2 h-4 w-4 flex-shrink-0" />
+                  </span>
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" className="rounded-full" asChild>
-                <Link to="/resources">Learn More</Link>
+              <Button variant="outline" size="lg" className="rounded-full whitespace-normal px-6 py-2 h-auto" asChild>
+                <Link to="/resources">
+                  <span className="flex items-center">
+                    Learn More
+                  </span>
+                </Link>
               </Button>
             </div>
           </div>
@@ -133,11 +139,11 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <Card key={index} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 card-hover">
-                <CardHeader className="pb-2">
+                <CardHeader className="pb-2 px-6 pt-6">
                   <div className="mb-4">{feature.icon}</div>
                   <CardTitle className="text-xl">{feature.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="px-6 pb-6">
                   <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
                 </CardContent>
               </Card>
@@ -182,7 +188,7 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-md card-hover">
-                <CardContent className="pt-6">
+                <CardContent className="pt-6 px-6 pb-6">
                   <div className="mb-4 text-mindbloom-500">
                     {Array(5).fill(0).map((_, i) => (
                       <span key={i} className="text-2xl">★</span>
@@ -212,12 +218,12 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {resources.map((resource, index) => (
-              <Card key={index} className="card-hover">
-                <CardHeader>
+              <Card key={index} className="card-hover border border-gray-200 dark:border-gray-700">
+                <CardHeader className="px-6 pt-6">
                   <CardTitle className="text-xl">{resource.title}</CardTitle>
-                  <CardDescription>{resource.description}</CardDescription>
+                  <CardDescription className="mt-2">{resource.description}</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="px-6 pb-6">
                   <Button variant="outline" asChild>
                     <Link to={resource.link}>Read More</Link>
                   </Button>
@@ -236,9 +242,11 @@ const Index = () => {
             <p className="mb-8">
               Take our comprehensive psychological assessment and get personalized insights and guidance.
             </p>
-            <Button size="lg" variant="secondary" className="rounded-full" asChild>
+            <Button size="lg" variant="secondary" className="rounded-full whitespace-normal px-6 py-2 h-auto" asChild>
               <Link to="/assessment">
-                Start Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                <span className="flex items-center">
+                  Start Assessment <ArrowRight className="ml-2 h-4 w-4 flex-shrink-0" />
+                </span>
               </Link>
             </Button>
           </div>
