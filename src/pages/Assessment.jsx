@@ -287,7 +287,7 @@ const Assessment = () => {
                 className="space-y-3"
               >
                 {questions[currentQuestion].options.map((option) => (
-                  <div key={option.value} className="flex items-center space-x-2 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div key={option.value} className="flex items-center space-x-3 p-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                     <RadioGroupItem 
                       id={`option-${option.value}`} 
                       value={option.value.toString()}
@@ -306,12 +306,12 @@ const Assessment = () => {
           </CardContent>
         </Card>
 
-        <div className="flex justify-between mt-8">
+        <div className="flex justify-between mt-8 flex-wrap gap-4 sm:flex-nowrap">
           <Button 
             variant="outline" 
             onClick={handlePrevious} 
             disabled={currentQuestion === 0}
-            className="rounded-lg px-6 py-2 flex items-center"
+            className="rounded-lg px-4 py-2 flex items-center w-full sm:w-auto"
             size="lg"
           >
             <ArrowLeft className="mr-2 h-4 w-4" /> Previous
@@ -319,7 +319,7 @@ const Assessment = () => {
           <Button 
             onClick={handleNext} 
             disabled={isSubmitting}
-            className="rounded-lg px-6 py-2 flex items-center"
+            className="rounded-lg px-4 py-2 flex items-center w-full sm:w-auto"
             size="lg"
           >
             {currentQuestion < totalQuestions - 1 ? (

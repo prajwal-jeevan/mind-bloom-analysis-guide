@@ -297,7 +297,7 @@ const Chat = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    className="min-h-10 resize-none"
+                    className="min-h-10 resize-none text-foreground dark:text-foreground dark:placeholder:text-gray-400"
                     disabled={isProcessing}
                   />
                   <Button 

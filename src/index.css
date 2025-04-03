@@ -146,3 +146,62 @@
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
   }
 }
+
+/* Improved responsiveness */
+@layer utilities {
+  .responsive-container {
+    @apply w-full px-4 sm:px-6 md:px-8 max-w-7xl mx-auto;
+  }
+  
+  .responsive-padding {
+    @apply px-4 sm:px-6 md:px-8;
+  }
+  
+  .responsive-grid {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3;
+  }
+  
+  .text-wrap-balance {
+    text-wrap: balance;
+  }
+  
+  .text-wrap-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* Fix for dark mode input contrast */
+.dark input, 
+.dark textarea {
+  color-scheme: dark;
+}
+
+/* Ensure proper spacing in tight layouts */
+.space-y-sm > * + * {
+  margin-top: 0.5rem;
+}
+
+.space-x-sm > * + * {
+  margin-left: 0.5rem;
+}
+
+/* Fix for radio button alignment */
+.radix-radio-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure buttons don't overflow on small screens */
+@media (max-width: 640px) {
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  
+  .button-container button {
+    width: 100%;
+  }
+}
