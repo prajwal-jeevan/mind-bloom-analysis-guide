@@ -242,7 +242,7 @@ const Assessment = () => {
 
   return (
     <div className="pt-24 pb-16">
-      <div className="container max-w-3xl">
+      <div className="container max-w-3xl mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Psychological Assessment</h1>
           <p className="text-gray-600 dark:text-gray-400">
@@ -250,26 +250,26 @@ const Assessment = () => {
           </p>
         </div>
 
-        <Card className="mb-6">
+        <Card className="mb-6 shadow-md">
           <CardHeader className="pb-3">
             <div className="flex justify-between items-center mb-2">
               <div className="text-sm text-gray-500 dark:text-gray-400">
                 Question {currentQuestion + 1} of {totalQuestions}
               </div>
-              <div className="text-sm font-medium text-mindbloom-600 dark:text-mindbloom-400">
+              <div className="text-sm font-medium text-primary">
                 {Math.round(progress)}% Complete
               </div>
             </div>
             <Progress value={progress} className="h-2" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             <div className="mb-6">
-              <div className="flex items-start gap-2 mb-4">
+              <div className="flex items-start gap-2 mb-6">
                 <h2 className="text-xl font-medium">{questions[currentQuestion].question}</h2>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
+                      <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full p-0 flex items-center justify-center">
                         <HelpCircle className="h-4 w-4" />
                         <span className="sr-only">More info</span>
                       </Button>
@@ -282,20 +282,20 @@ const Assessment = () => {
               </div>
 
               <RadioGroup 
-                value={answers[questions[currentQuestion].id]?.value} 
+                value={answers[questions[currentQuestion].id]?.value?.toString()} 
                 onValueChange={(value) => handleAnswer(parseInt(value, 10))}
                 className="space-y-3"
               >
                 {questions[currentQuestion].options.map((option) => (
-                  <div key={option.value} className="flex items-center">
+                  <div key={option.value} className="flex items-center space-x-2 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                     <RadioGroupItem 
                       id={`option-${option.value}`} 
                       value={option.value.toString()}
-                      className="peer"
+                      className="cursor-pointer"
                     />
                     <Label 
                       htmlFor={`option-${option.value}`}
-                      className="pl-2 py-3 w-full cursor-pointer peer-aria-checked:text-primary peer-aria-checked:font-medium transition-colors"
+                      className="w-full cursor-pointer py-2 text-base"
                     >
                       {option.label}
                     </Label>
@@ -306,19 +306,21 @@ const Assessment = () => {
           </CardContent>
         </Card>
 
-        <div className="flex justify-between mt-6">
+        <div className="flex justify-between mt-8">
           <Button 
             variant="outline" 
             onClick={handlePrevious} 
             disabled={currentQuestion === 0}
-            className="rounded-lg"
+            className="rounded-lg px-6 py-2 flex items-center"
+            size="lg"
           >
             <ArrowLeft className="mr-2 h-4 w-4" /> Previous
           </Button>
           <Button 
             onClick={handleNext} 
             disabled={isSubmitting}
-            className="rounded-lg"
+            className="rounded-lg px-6 py-2 flex items-center"
+            size="lg"
           >
             {currentQuestion < totalQuestions - 1 ? (
               <>Next <ArrowRight className="ml-2 h-4 w-4" /></>

@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Send, Loader2, RefreshCw, AlertCircle, User, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,19 +9,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 
-// Function to get response from Gemini API
 const getGeminiResponse = async (messageHistory) => {
   try {
     const API_KEY = "AIzaSyDfre4670HNfsJcpQe039hdZ43roymvbag";
     const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
     
-    // Format the message history for the API
     const formattedMessages = messageHistory.map(msg => ({
       role: msg.isUser ? "user" : "model",
       parts: [{ text: msg.content }]
     }));
     
-    // Add system prompt at the beginning
     formattedMessages.unshift({
       role: "user",
       parts: [{ 
@@ -31,15 +27,18 @@ const getGeminiResponse = async (messageHistory) => {
         Guidelines:
         - Be warm, compassionate and supportive in your responses
         - Provide practical, evidence-based strategies when appropriate
-        - Highlight important points with **bold text**
-        - Format your responses with clear structure using simple markdown (headings, bullet points)
+        - Format important points in a highlighted way
+        - Use proper formatting with bullet points (but don't show the bullet symbols in the final output)
+        - Structure your response with clear headings but don't use markdown symbols like # or * in the final output
         - If someone appears to be in crisis, gently encourage them to seek professional help
         - When relevant, suggest specific self-care practices, mindfulness techniques, or cognitive strategies
         - Focus on mental wellness topics like stress, anxiety, mood, focus, sleep, and resilience
         - Keep responses concise and well-structured
         - Acknowledge that you're not a replacement for professional mental health care
 
-        Important: If someone seems to be in immediate danger to themselves or others, always prioritize their safety by directing them to emergency services, crisis hotlines, or advising them to speak with a mental health professional immediately.` 
+        Important: If someone seems to be in immediate danger to themselves or others, always prioritize their safety by directing them to emergency services, crisis hotlines, or advising them to speak with a mental health professional immediately.
+        
+        For any lists or bullet points, do not use symbols like * or - in your response. Instead, format them as proper HTML list items that will be rendered correctly.` 
       }]
     });
     
@@ -72,48 +71,44 @@ const getGeminiResponse = async (messageHistory) => {
   }
 };
 
-// Function to format markdown-like text to JSX
 const formatMessage = (text) => {
   if (!text) return "";
   
-  // Split by new lines and process each line
-  return text.split("\n").map((line, i) => {
-    // Headings
-    if (line.startsWith("# ")) {
-      return <h2 key={i} className="text-xl font-bold mt-4 mb-2">{line.substring(2)}</h2>;
-    }
-    if (line.startsWith("## ")) {
-      return <h3 key={i} className="text-lg font-semibold mt-3 mb-2">{line.substring(3)}</h3>;
-    }
-    
-    // Bullet points
-    if (line.startsWith("* ") || line.startsWith("- ")) {
-      return <li key={i} className="ml-5 list-disc my-1">{line.substring(2)}</li>;
-    }
-    
-    // Numbered lists
-    if (/^\d+\.\s/.test(line)) {
-      return <li key={i} className="ml-5 list-decimal my-1">{line.substring(line.indexOf(".") + 2)}</li>;
-    }
-    
-    // Bold text
-    let processedLine = line;
-    if (line.includes("**")) {
-      // Need to do this via regex to handle multiple bold sections in one line
-      processedLine = processedLine.replace(
-        /\*\*(.*?)\*\*/g, 
-        (_, p1) => `<strong class="text-primary font-semibold">${p1}</strong>`
-      );
-    }
-    
-    // If line is empty, return a spacer
+  let cleanedText = text;
+  
+  cleanedText = cleanedText.replace(/^# (.*?)$/gm, (_, heading) => 
+    `<h2 class="text-xl font-bold mt-4 mb-2">${heading}</h2>`
+  );
+  
+  cleanedText = cleanedText.replace(/^## (.*?)$/gm, (_, heading) => 
+    `<h3 class="text-lg font-semibold mt-3 mb-2">${heading}</h3>`
+  );
+  
+  cleanedText = cleanedText.replace(/^[*\-] (.*?)$/gm, (_, point) => 
+    `<li class="ml-5 flex items-start my-1 before:content-['•'] before:mr-2 before:text-primary">${point}</li>`
+  );
+  
+  cleanedText = cleanedText.replace(/^\d+\.\s+(.*?)$/gm, (_, point) => 
+    `<li class="ml-5 list-decimal my-1">${point}</li>`
+  );
+  
+  cleanedText = cleanedText.replace(/\*\*(.*?)\*\*/g, (_, text) => 
+    `<span class="font-bold text-primary">${text}</span>`
+  );
+  
+  const elements = cleanedText.split('\n').map((line, i) => {
     if (line.trim() === "") {
       return <div key={i} className="h-2"></div>;
     }
     
-    // Regular paragraph
-    return <p key={i} className="my-1" dangerouslySetInnerHTML={{ __html: processedLine }}></p>;
+    if (line.includes('<')) {
+      return <div key={i} dangerouslySetInnerHTML={{ __html: line }}></div>;
+    }
+    
+    return <p key={i} className="my-1">{line}</p>;
   });
+  
+  return elements;
 };
 
 const suggestedPrompts = [
@@ -140,7 +135,6 @@ const Chat = () => {
   const messagesEndRef = useRef(null);
   const { toast } = useToast();
   
-  // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -160,10 +154,8 @@ const Chat = () => {
     setIsProcessing(true);
     
     try {
-      // Get message history for context (limit to last 10 messages)
       const messageHistory = [...messages.slice(-10), userMessage];
       
-      // Get AI response
       const aiResponse = await getGeminiResponse(messageHistory);
       
       setMessages(prev => [
@@ -211,7 +203,7 @@ const Chat = () => {
   
   return (
     <div className="pt-24 pb-16">
-      <div className="container max-w-4xl">
+      <div className="container max-w-4xl mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Chat Support</h1>
           <p className="text-gray-600 dark:text-gray-400">
@@ -221,8 +213,8 @@ const Chat = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="md:col-span-3">
-            <Card className="border-gray-200 dark:border-gray-700 h-[600px] flex flex-col">
-              <CardHeader className="pb-3">
+            <Card className="border-gray-200 dark:border-gray-700 h-[600px] flex flex-col shadow-md">
+              <CardHeader className="pb-3 border-b">
                 <div className="flex items-center">
                   <Avatar className="h-8 w-8 mr-2">
                     <AvatarImage src="/placeholder.svg" alt="AI Assistant" />
@@ -237,7 +229,7 @@ const Chat = () => {
               
               <CardContent className="flex-grow overflow-hidden p-0">
                 <ScrollArea className="h-full px-4">
-                  <div className="space-y-4 pt-1 pb-4">
+                  <div className="space-y-4 pt-4 pb-4">
                     {messages.map((message) => (
                       <div
                         key={message.id}
@@ -248,7 +240,7 @@ const Chat = () => {
                       >
                         <div
                           className={cn(
-                            "flex max-w-[80%] rounded-lg px-4 py-3",
+                            "flex max-w-[85%] rounded-lg px-4 py-3",
                             message.isUser
                               ? "bg-primary text-primary-foreground"
                               : "bg-muted"
@@ -262,7 +254,7 @@ const Chat = () => {
                                 </AvatarFallback>
                               </Avatar>
                             )}
-                            <div className={message.isUser ? "text-white" : ""}>
+                            <div className={cn("prose prose-sm max-w-none", message.isUser ? "text-white" : "")}>
                               {message.isUser ? message.content : formatMessage(message.content)}
                             </div>
                             {message.isUser && (
@@ -285,8 +277,10 @@ const Chat = () => {
                                 <Bot className="h-3 w-3" />
                               </AvatarFallback>
                             </Avatar>
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            <span className="text-sm text-gray-500">Thinking...</span>
+                            <div className="flex items-center">
+                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                              <span className="text-sm">Thinking...</span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -310,6 +304,7 @@ const Chat = () => {
                     type="submit" 
                     size="icon" 
                     disabled={isProcessing || !input.trim()}
+                    className="h-10 w-10 shrink-0"
                   >
                     <Send className="h-4 w-4" />
                     <span className="sr-only">Send</span>
@@ -320,7 +315,7 @@ const Chat = () => {
           </div>
           
           <div className="space-y-4">
-            <Card>
+            <Card className="shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Actions</CardTitle>
               </CardHeader>
@@ -336,7 +331,7 @@ const Chat = () => {
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Suggested Topics</CardTitle>
               </CardHeader>
@@ -346,7 +341,7 @@ const Chat = () => {
                     <Button
                       key={index}
                       variant="ghost"
-                      className="w-full justify-start text-sm h-auto py-2 px-3"
+                      className="w-full justify-start text-sm h-auto py-2 px-3 text-left"
                       onClick={() => handleSuggestedPrompt(prompt)}
                     >
                       {prompt}

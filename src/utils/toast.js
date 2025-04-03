@@ -1,23 +1,39 @@
 
 import { toast as sonnerToast } from 'sonner';
 
-// Create a simple toast utility that wraps the sonner toast functions
-const toast = {
-  // Basic toast function
-  message: (message, options = {}) => sonnerToast(message, options),
+// Create a toast utility function that wraps sonner
+const toast = (options) => {
+  // Map the options from shadcn/ui toast to sonner toast
+  const { title, description, variant = "default", ...rest } = options;
   
-  // Status toasts
-  success: (message, options = {}) => sonnerToast.success(message, options),
-  error: (message, options = {}) => sonnerToast.error(message, options),
-  warning: (message, options = {}) => sonnerToast.warning(message, options),
-  info: (message, options = {}) => sonnerToast.info(message, options),
-  
-  // Dismiss all toasts
-  dismiss: () => sonnerToast.dismiss(),
-  
-  // Promise toast
-  promise: (promise, messages, options = {}) => 
-    sonnerToast.promise(promise, messages, options),
+  // Handle different variants
+  switch (variant) {
+    case "destructive":
+      return sonnerToast.error(title, {
+        description,
+        ...rest
+      });
+    case "success":
+      return sonnerToast.success(title, {
+        description,
+        ...rest
+      });
+    case "warning":
+      return sonnerToast.warning(title, {
+        description,
+        ...rest
+      });
+    case "info":
+    case "default":
+    default:
+      return sonnerToast(title, {
+        description,
+        ...rest
+      });
+  }
 };
+
+// Add a dismiss method for backward compatibility
+toast.dismiss = sonnerToast.dismiss;
 
 export default toast;
